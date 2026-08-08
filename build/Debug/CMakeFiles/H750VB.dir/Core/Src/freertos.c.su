@@ -1,0 +1,5 @@
+/Users/igor404ik/H750VB/Core/Src/freertos.c:28:13:pre_config_rtos	8	static
+/Users/igor404ik/H750VB/Core/Src/freertos.c:34:13:scheduler_rtos_start	8	static
+/Users/igor404ik/H750VB/Core/Src/freertos.c:41:6:os_main	8	static
+/Users/igor404ik/H750VB/Core/Src/freertos.c:50:6:vApplicationMallocFailedHook	16	static
+/Users/igor404ik/H750VB/Core/Src/freertos.c:55:6:vApplicationStackOverflowHook	24	static

@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug H750VB (Build + Flash)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/H750VB.elf",
+      "servertype": "openocd",
+      "device": "STM32H750VB",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32h7x.cfg"
+      ],
+      "runToEntryPoint": "main",
+      "preLaunchTask": "Build and Flash Debug",
+      "postRestartCommands": [
+        "monitor reset halt"
+      ]
+    },
+    {
+      "name": "Attach H750VB (OpenOCD)",
+      "type": "cortex-debug",
+      "request": "attach",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/H750VB.elf",
+      "servertype": "openocd",
+      "device": "STM32H750VB",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32h7x.cfg"
+      ]
+    }
+  ]
+}

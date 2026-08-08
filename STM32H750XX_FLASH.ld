@@ -107,6 +107,23 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+/* ============================================================
+ * OS Task Descriptors
+ * ============================================================ */
+
+.os.task.desc :
+{
+    . = ALIGN(4);
+
+    __os_task_desc_start = .;
+
+    KEEP(*(.os.task.desc))
+
+    __os_task_desc_end = .;
+
+    . = ALIGN(4);
+} >FLASH
+
   .ARM.extab (READONLY) : /* The "READONLY" keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(4);

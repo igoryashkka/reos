@@ -18,42 +18,41 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "FreeRTOS.h"
-#include "task.h"
+#include "debug_tools.h"
+#include "os_main.h"
+#include "os_task.h"
 #include "main.h"
+#include "cmsis_os2.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+static void pre_config_rtos(void) {
+  os_task_init_all();
+  /* initialization os kernal */
+  osKernelInitialize();
+}
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
+static void scheduler_rtos_start(void) {
+  /* Start scheduler */
+  osKernelStart();
+}
 
-/* USER CODE END PTD */
 
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
 
-/* USER CODE END PD */
+void os_main(void) {
+  /* initialization configuration */
+  pre_config_rtos();
+	/* Start scheduler */
+	scheduler_rtos_start();
+	/* Should never get here*/
+  return;
+}
 
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
+void vApplicationMallocFailedHook(void)
+{
+  debug_panic(DEBUG_PANIC_MALLOC_FAILED, __FILE__, __LINE__, 0, 0);
+}
 
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-/* USER CODE BEGIN Variables */
-
-/* USER CODE END Variables */
-
-/* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN FunctionPrototypes */
-
-/* USER CODE END FunctionPrototypes */
-
-/* Private application code --------------------------------------------------*/
-/* USER CODE BEGIN Application */
-
-/* USER CODE END Application */
-
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
+{
+  debug_panic(DEBUG_PANIC_STACK_OVERFLOW, __FILE__, __LINE__, pcTaskName, xTask);
+}
