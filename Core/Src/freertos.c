@@ -19,6 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "debug_tools.h"
+#include "logger.h"
 #include "os_main.h"
 #include "os_task.h"
 #include "main.h"
@@ -26,12 +27,19 @@
 
 
 static void pre_config_rtos(void) {
+  logger_init();
+  LOG_INFO(LOG_MODULE_SYSTEM, "logger ready");
+
   os_task_init_all();
+  LOG_INFO(LOG_MODULE_SYSTEM, "tasks created");
+
   /* initialization os kernal */
   osKernelInitialize();
+  LOG_INFO(LOG_MODULE_SYSTEM, "cmsis kernel initialized");
 }
 
 static void scheduler_rtos_start(void) {
+  LOG_INFO(LOG_MODULE_SYSTEM, "starting scheduler");
   /* Start scheduler */
   osKernelStart();
 }

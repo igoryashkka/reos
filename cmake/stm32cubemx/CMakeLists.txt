@@ -15,6 +15,7 @@ set(FREERTOS_PORT_DIR ARM_CM4F)
 set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../os/Task
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Middlewares/Third_Party/FreeRTOS/Source/include
@@ -30,9 +31,15 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/debug_tools.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/freertos.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/uart_stm32h750.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../os/Task/os_task.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/network/ethernet.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_backend.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_format.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_task.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_record.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/backends/logger_uart.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_it.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_hal_msp.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/sysmem.c
