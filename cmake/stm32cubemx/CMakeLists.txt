@@ -16,6 +16,8 @@ set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../os/Task
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/massges
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Middlewares/Third_Party/FreeRTOS/Source/include
@@ -28,6 +30,7 @@ set(MX_Include_Dirs
 
 # STM32CubeMX generated application sources
 set(MX_Application_Src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../App/application.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/debug_tools.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/freertos.c
@@ -40,6 +43,11 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_task.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/logger_record.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger/backends/logger_uart.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/rp_proto.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/rp_msg.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/rp_hw_if.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/backends/rp_hw_uart.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/backends/rp_hw_radio.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_it.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_hal_msp.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/sysmem.c
