@@ -18,6 +18,7 @@ set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/massges
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless/port
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Middlewares/Third_Party/FreeRTOS/Source/include

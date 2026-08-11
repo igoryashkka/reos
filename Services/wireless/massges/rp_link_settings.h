@@ -34,7 +34,7 @@ static inline int rp_link_build_settings(rp_link_t *link, uint8_t *out, size_t o
         msg.u.cfg.p[index] = params[index];
     }
 
-    return rp_link_send(link, &msg, out, out_cap);
+    return rp_link_encode(link, &msg, out, out_cap);
 }
 
 #ifdef __cplusplus

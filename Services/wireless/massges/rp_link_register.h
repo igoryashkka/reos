@@ -29,7 +29,7 @@ static inline int rp_link_build_register(rp_link_t *link, uint8_t *out, size_t o
     msg.u.reg.fw_ver = fw_ver;
     msg.u.reg.caps = caps;
 
-    return rp_link_send(link, &msg, out, out_cap);
+    return rp_link_encode(link, &msg, out, out_cap);
 }
 
 #ifdef __cplusplus

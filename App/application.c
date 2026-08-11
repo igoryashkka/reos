@@ -1,19 +1,13 @@
 #include "logger.h"
 #include "os_task.h"
-#include "rp_hw_if.h"
-#include "rp_link.h"
-#include "rp_link_auth.h"
-#include "rp_link_ping.h"
-#include "rp_link_register.h"
-#include "rp_link_sensor.h"
-#include "rp_link_settings.h"
-#include "rp_msg.h"
+#include "rp_network.h"
+#include "rp_port.h"
+
 #include "stm32h7xx_hal.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -21,23 +15,14 @@
 #define APP_DEV_FW_VER  0x00010000u  /* 1.0.0.0 */
 #define APP_DEV_CAPS    0u
 
-/* Послідовність роботи застосунку: реєстрація -> автентифікація ->
- * налаштування -> робочий цикл (пінг чергується з надсиланням даних). */
-typedef enum
-{
-  APP_STAGE_REGISTER = 0,
-  APP_STAGE_AUTH,
-  APP_STAGE_SETTINGS,
-  APP_STAGE_RUN_PING,
-  APP_STAGE_RUN_SENSOR
-} application_stage_t;
-
+/* App/ бачить лише rp_network.h — яка мережева модель (P2P/IoT) чи IoT
+ * роль (leaf/router/gateway) насправді лінкується, обирає RP_NETWORK_MODEL/
+ * RP_IOT_ROLE на етапі збірки (rp_config.cmake). Ані #ifdef, ані знання
+ * про tx_buf/rp_msg_build/rp_hw_if_send тут бути не повинно. */
 typedef struct
 {
-  rp_link_t            link;
-  application_stage_t  stage;
-  uint8_t              dev_id[RP_DEV_ID_LEN];
-  rp_reading_t         reading;
+  uint8_t       dev_id[RP_DEV_ID_LEN];
+  rp_reading_t  reading;
 } application_t;
 
 static application_t g_app;
@@ -64,86 +49,41 @@ static void application_init_data(void)
 
 void application_init(void)
 {
-  rp_hw_if_init_all();
-  rp_link_init(&g_app.link);
+  rp_network_cfg_t cfg = {0};
+
   application_init_data();
-  g_app.stage = APP_STAGE_REGISTER;
+
+  cfg.addr         = RP_ADDR_UNASSIGNED;
+  cfg.gateway_addr = RP_ADDR_BROADCAST;
+  memcpy(cfg.dev_id, g_app.dev_id, RP_DEV_ID_LEN);
+  cfg.hw_ver = APP_DEV_HW_VER;
+  cfg.fw_ver = APP_DEV_FW_VER;
+  cfg.caps   = APP_DEV_CAPS;
+  cfg.hw_if  = RP_HW_IF_UART;
+
+  rp_network_init(&cfg);
 
   LOG_INFO(LOG_MODULE_APP, "application initialized");
 }
 
 void application_process(void)
 {
-  uint8_t tx_buf[RP_LINK_TX_CAP];
-  int tx_len;
+  uint32_t now_ms = rp_port_now_ms();
+  rp_msg_t msg = {0};
 
-  switch (g_app.stage)
+  msg.type = RP_T_SENSOR;
+  msg.u.sensor.n = 1u;
+  msg.u.sensor.r[0] = g_app.reading;
+  g_app.reading.value++;
+
+  if (rp_network_submit(&msg, RP_NETWORK_PRIO_NORMAL) != RP_MSG_OK)
   {
-  case APP_STAGE_REGISTER:
-    tx_len = rp_link_build_register(
-      &g_app.link, tx_buf, sizeof(tx_buf),
-      g_app.dev_id, APP_DEV_HW_VER, APP_DEV_FW_VER, APP_DEV_CAPS
-    );
-    if (tx_len >= 0)
-    {
-      g_app.stage = APP_STAGE_AUTH;
-    }
-    break;
-
-  case APP_STAGE_AUTH:
-    tx_len = rp_link_build_auth(
-      &g_app.link, tx_buf, sizeof(tx_buf),
-      g_app.dev_id, (uint32_t)xTaskGetTickCount()
-    );
-    if (tx_len >= 0)
-    {
-      g_app.stage = APP_STAGE_SETTINGS;
-    }
-    break;
-
-  case APP_STAGE_SETTINGS:
-    {
-      rp_param_t tx_interval = { .id = RP_PARAM_TX_INTERVAL_S, .len = 0u };
-
-      tx_len = rp_link_build_settings(
-        &g_app.link, tx_buf, sizeof(tx_buf), &tx_interval, 1u, false
-      );
-    }
-    if (tx_len >= 0)
-    {
-      g_app.stage = APP_STAGE_RUN_PING;
-    }
-    break;
-
-  case APP_STAGE_RUN_PING:
-    tx_len = rp_link_build_ping(
-      &g_app.link, tx_buf, sizeof(tx_buf), (uint32_t)xTaskGetTickCount()
-    );
-    g_app.stage = APP_STAGE_RUN_SENSOR;
-    break;
-
-  case APP_STAGE_RUN_SENSOR:
-  default:
-    tx_len = rp_link_build_sensor(
-      &g_app.link, tx_buf, sizeof(tx_buf), &g_app.reading, 1u
-    );
-    g_app.reading.value++;
-    g_app.stage = APP_STAGE_RUN_PING;
-    break;
+    LOG_ERROR(LOG_MODULE_APP, "submit failed");
   }
 
-  if (tx_len < 0)
-  {
-    LOG_ERROR(LOG_MODULE_APP, "build failed stage=%d", (int)g_app.stage);
-    return;
-  }
+  rp_network_tick(now_ms);
 
-  LOG_INFO(LOG_MODULE_APP, "built len=%d stage=%d", tx_len, (int)g_app.stage);
-
-  if (rp_hw_if_send(tx_buf, (size_t)tx_len) < 0)
-  {
-    LOG_ERROR(LOG_MODULE_APP, "hw send failed stage=%d", (int)g_app.stage);
-  }
+  LOG_INFO(LOG_MODULE_APP, "tick now_ms=%lu", (unsigned long)now_ms);
 }
 
 static void application_task(void *arg)
@@ -155,7 +95,11 @@ static void application_task(void *arg)
   for (;;)
   {
     application_process();
-    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    /* 0 = негайно є робота (наприклад, register/auth retry) — невеликий
+     * floor замість зайнятого циклу без сну. */
+    uint32_t deadline_ms = rp_network_next_deadline_ms(rp_port_now_ms());
+    rp_port_sleep_ms((deadline_ms > 0u) ? deadline_ms : 10u);
   }
 }
 

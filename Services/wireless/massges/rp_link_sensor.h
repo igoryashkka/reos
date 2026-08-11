@@ -27,14 +27,14 @@ static inline int rp_link_build_sensor(rp_link_t *link, uint8_t *out, size_t out
 
     memset(&msg, 0, sizeof(msg));
     msg.type = RP_T_SENSOR;
-    msg.u.sensor.batch_tag = link->tag++;
+    msg.u.sensor.batch_tag = rp_link_alloc_tag(link);
     msg.u.sensor.n = count;
     for (uint8_t index = 0; index < count; index++)
     {
         msg.u.sensor.r[index] = readings[index];
     }
 
-    return rp_link_send(link, &msg, out, out_cap);
+    return rp_link_encode(link, &msg, out, out_cap);
 }
 
 #ifdef __cplusplus

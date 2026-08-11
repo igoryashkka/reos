@@ -26,7 +26,7 @@ static inline int rp_link_build_auth(rp_link_t *link, uint8_t *out, size_t out_c
     memcpy(msg.u.auth.dev_id, dev_id, RP_DEV_ID_LEN);
     msg.u.auth.response = response;
 
-    return rp_link_send(link, &msg, out, out_cap);
+    return rp_link_encode(link, &msg, out, out_cap);
 }
 
 #ifdef __cplusplus

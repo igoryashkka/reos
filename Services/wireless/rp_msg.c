@@ -421,6 +421,49 @@ static int dec_sensor(const rp_frame_t *frame, rp_msg_t *msg)
     return RP_MSG_OK;
 }
 
+static int enc_alarm(const rp_msg_t *msg, rp_payload_t *payload)
+{
+    const rp_m_event_t *e = &msg->u.event;
+
+    RP_REQ(e->text_len <= RP_MAX_TEXT);
+    payload->core.sub = e->ev_class;
+    payload->core.arg = e->ev_code;
+
+    RP_W_BEGIN(payload);
+    if (e->text_len)
+    {
+        rp_tlv_w_bytes(&w, RP_TLV_TEXT, (const uint8_t *)e->text, e->text_len);
+    }
+    RP_W_END(payload);
+
+    return RP_MSG_OK;
+}
+
+static int dec_alarm(const rp_frame_t *frame, rp_msg_t *msg)
+{
+    rp_m_event_t *e = &msg->u.event;
+    rp_tlv_r_t rd;
+    uint8_t tag, len;
+    const uint8_t *data;
+
+    memset(e, 0, sizeof *e);
+    e->ev_class = frame->core.sub;
+    e->ev_code  = frame->core.arg;
+
+    rp_tlv_r_init(&rd, frame->tail, frame->tail_len);
+    while (rp_tlv_r_next(&rd, &tag, &data, &len))
+    {
+        if (tag == RP_TLV_TEXT)
+        {
+            uint8_t copy_len = (len <= RP_MAX_TEXT) ? len : RP_MAX_TEXT;
+            memcpy(e->text, data, copy_len);
+            e->text_len = copy_len;
+        }
+    }
+
+    return RP_MSG_OK;
+}
+
 /* ================================================================== */
 /* Таблиця дескрипторів                                                */
 /*                                                                     */
@@ -451,6 +494,7 @@ static const rp_desc_t k_desc[] = {
     { RP_T_CFG_APP,   RP_F_ACK_REQ,  enc_cfg,       dec_cfg,       "CFG_APP"   },
     { RP_T_CFG_RESP,  0u,            enc_cfg,       dec_cfg,       "CFG_RESP"  },
     { RP_T_SENSOR,    RP_F_ACK_REQ,  enc_sensor,    dec_sensor,    "SENSOR"    },
+    { RP_T_ALARM,     RP_F_ACK_REQ,  enc_alarm,     dec_alarm,     "ALARM"     },
 };
 
 #define RP_NDESC (sizeof k_desc / sizeof k_desc[0])

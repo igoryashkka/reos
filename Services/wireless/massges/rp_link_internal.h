@@ -4,7 +4,10 @@
 #include "rp_link.h"
 #include "rp_msg.h"
 
-static inline int rp_link_send(rp_link_t *link, const rp_msg_t *msg, uint8_t *out, size_t out_cap)
+/* Лише кодує в out — попри стару назву "send", в ефір нічого не йде.
+ * Фактичну передачу виконує викликач через rp_hw_if_send() (App/ або
+ * roles/), інакше кадр був би переданий двічі. */
+static inline int rp_link_encode(rp_link_t *link, const rp_msg_t *msg, uint8_t *out, size_t out_cap)
 {
 	int rc;
 

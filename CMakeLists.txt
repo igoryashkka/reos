@@ -31,6 +31,9 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
 
+# rp_* wireless network model selection, see Services/wireless/rp_config.cmake
+include(Services/wireless/rp_config.cmake)
+
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME})
 
@@ -46,6 +49,16 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
 )
+
+# rp_* wireless network model (RP_NETWORK_MODEL/RP_IOT_ROLE), see
+# Services/wireless/rp_config.cmake. Host unit tests are a separate,
+# standalone native CMake project (Services/wireless/tests/), not a
+# value of RP_NETWORK_MODEL — this preset always builds real firmware.
+if(RP_NETWORK_MODEL STREQUAL "IOT")
+    rp_configure_network(${CMAKE_PROJECT_NAME} IOT freertos ${RP_IOT_ROLE})
+else()
+    rp_configure_network(${CMAKE_PROJECT_NAME} ${RP_NETWORK_MODEL} freertos)
+endif()
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE

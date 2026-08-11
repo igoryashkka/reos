@@ -24,7 +24,7 @@ static inline int rp_link_build_ping(rp_link_t *link, uint8_t *out, size_t out_c
 	msg.type = RP_T_PING;
 	msg.u.ping.nonce = nonce;
 
-	return rp_link_send(link, &msg, out, out_cap);
+	return rp_link_encode(link, &msg, out, out_cap);
 }
 
 #ifdef __cplusplus

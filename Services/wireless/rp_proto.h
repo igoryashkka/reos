@@ -182,6 +182,35 @@ int rp_build(uint8_t *out, size_t out_cap,
              const rp_tx_meta_t *m, const rp_core_t *core,
              const uint8_t *tail, uint16_t tail_len);
 
+/* ------------------------------------------------------------------ */
+/* RX: побайтовий парсер потоку в rp_frame_t                           */
+/* ------------------------------------------------------------------ */
+typedef enum {
+    RP_RX_STATE_SYNC0 = 0,
+    RP_RX_STATE_SYNC1,
+    RP_RX_STATE_HDR,
+    RP_RX_STATE_PAYLOAD,
+    RP_RX_STATE_CRC
+} rp_rx_state_t;
+
+typedef struct {
+    rp_rx_state_t state;
+    uint8_t       buf[RP_HDR_SIZE + RP_MAX_PAYLOAD]; /* заголовок + payload */
+    uint16_t      index;
+    uint16_t      payload_len;
+    uint8_t       crc_buf[RP_CRC_SIZE];
+    uint8_t       crc_index;
+} rp_rx_parser_t;
+
+void rp_parse_init(rp_rx_parser_t *p);
+
+/* Згодовує один байт потоку.
+ * Повертає: 1 — кадр зібрано й валідний (out заповнено, out->tail вказує
+ * всередину p->buf — дійсний до наступного виклику rp_parse_byte);
+ * 0 — потрібно більше байтів; -1 — кадр відкинуто (hcrc/crc/довжина),
+ * парсер вже автоматично повернувся в пошук sync. */
+int rp_parse_byte(rp_rx_parser_t *p, uint8_t byte, rp_frame_t *out);
+
 #ifdef __cplusplus
 }
 #endif
