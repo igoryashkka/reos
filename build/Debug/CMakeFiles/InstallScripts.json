@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/igor404ik/H750VB/build/Debug/cmake_install.cmake",
-		"/Users/igor404ik/H750VB/build/Debug/cmake/stm32cubemx/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
