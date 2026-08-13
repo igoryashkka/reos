@@ -1,11 +1,9 @@
 #include "uart.h"
 
+#include "config_pin.h"
 #include "main.h"
 
-#define LOGGER_UART_INSTANCE              USART3
-#define LOGGER_UART_GPIO_PORT             GPIOB
-#define LOGGER_UART_GPIO_PIN              GPIO_PIN_10
-#define LOGGER_UART_GPIO_AF               GPIO_AF7_USART3
+#define LOGGER_UART_INSTANCE              BSP_LOG_UART_INSTANCE
 #define LOGGER_UART_BAUDRATE              115200U
 
 static int logger_uart_initialized;
@@ -16,13 +14,13 @@ static void logger_uart_gpio_init(void)
 
     __HAL_RCC_GPIOB_CLK_ENABLE();
 
-    gpio_init.Pin = GPIO_PIN_10;
+    gpio_init.Pin = BSP_LOG_UART_GPIO_PIN;
     gpio_init.Mode = GPIO_MODE_AF_PP;
     gpio_init.Pull = GPIO_NOPULL;
     gpio_init.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    gpio_init.Alternate = GPIO_AF7_USART3;
+    gpio_init.Alternate = BSP_LOG_UART_GPIO_AF;
 
-    HAL_GPIO_Init(GPIOB, &gpio_init);
+    HAL_GPIO_Init(BSP_LOG_UART_GPIO_PORT, &gpio_init);
 }
 
 static uint32_t logger_uart_get_clock_hz(void)

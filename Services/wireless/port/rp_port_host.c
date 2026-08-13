@@ -1,4 +1,4 @@
-#include "rp_port.h"
+//#include "rp_port.h"
 #include "rp_port_host.h"
 
 static uint32_t g_now_ms;

@@ -14,6 +14,7 @@ set(FREERTOS_PORT_DIR ARM_CM4F)
 
 set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Platform/BSP
     ${CMAKE_CURRENT_SOURCE_DIR}/../../os/Task
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/logger
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Services/wireless

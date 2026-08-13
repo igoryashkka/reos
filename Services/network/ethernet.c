@@ -1,6 +1,7 @@
 #include "os_task.h"
 #include "logger.h"
 #include "main.h"
+#include "config_pin.h"
 
 static void ethernet_task(void *arg)
 {
@@ -12,7 +13,7 @@ static void ethernet_task(void *arg)
 
     for (;;)
     {
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+        HAL_GPIO_TogglePin(BSP_LED1_PORT, BSP_LED1_PIN);
         blink_count++;
 
         if ((blink_count % 10U) == 0U)
