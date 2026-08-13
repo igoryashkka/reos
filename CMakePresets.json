@@ -6,20 +6,50 @@
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
-		    "toolchainFile": "${sourceDir}/cmake/gcc-arm-none-eabi.cmake",
+            "toolchainFile": "${sourceDir}/cmake/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
             }
         },
         {
-            "name": "Debug",
+            "name": "H750VB",
+            "hidden": true,
             "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "H750VB"
+            }
+        },
+        {
+            "name": "F413",
+            "hidden": true,
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "F413"
+            }
+        },
+        {
+            "name": "Debug",
+            "inherits": "H750VB",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "name": "Release",
-            "inherits": "default",
+            "inherits": "H750VB",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "Debug-F413",
+            "inherits": "F413",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Release-F413",
+            "inherits": "F413",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -33,6 +63,14 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        },
+        {
+            "name": "Debug-F413",
+            "configurePreset": "Debug-F413"
+        },
+        {
+            "name": "Release-F413",
+            "configurePreset": "Release-F413"
         }
     ]
 }

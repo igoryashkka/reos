@@ -1,9 +1,9 @@
 #include "logger.h"
 #include "os_task.h"
 #include "rp_network.h"
-//#include "port.h"
+#include "rp_port.h"
 
-#include "stm32h7xx_hal.h"
+#include "main.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
