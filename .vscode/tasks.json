@@ -31,6 +31,52 @@
         "Flash Debug image"
       ],
       "problemMatcher": []
+    },
+    {
+      "label": "Build Debug-F413 preset",
+      "type": "shell",
+      "command": "cmake --build --preset Debug-F413",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Flash Debug-F413 image",
+      "type": "shell",
+      "command": "openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c \"program build/Debug-F413/H750VB.elf verify reset exit\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and Flash Debug-F413",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build Debug-F413 preset",
+        "Flash Debug-F413 image"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Flash Only: H750VB (no debug)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build Debug preset",
+        "Flash Debug image"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Flash Only: F413 (no debug)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build Debug-F413 preset",
+        "Flash Debug-F413 image"
+      ],
+      "problemMatcher": []
     }
   ]
 }

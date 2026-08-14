@@ -31,6 +31,37 @@
         "interface/stlink.cfg",
         "target/stm32h7x.cfg"
       ]
+    },
+    {
+      "name": "Debug F413 (Build + Flash)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug-F413/H750VB.elf",
+      "servertype": "openocd",
+      "device": "STM32F413VGTx",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32f4x.cfg"
+      ],
+      "runToEntryPoint": "main",
+      "preLaunchTask": "Build and Flash Debug-F413",
+      "postRestartCommands": [
+        "monitor reset halt"
+      ]
+    },
+    {
+      "name": "Attach F413 (OpenOCD)",
+      "type": "cortex-debug",
+      "request": "attach",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug-F413/H750VB.elf",
+      "servertype": "openocd",
+      "device": "STM32F413VGTx",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32f4x.cfg"
+      ]
     }
   ]
 }
