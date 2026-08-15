@@ -71,6 +71,7 @@ target_include_directories(stm32cubemx INTERFACE
     ${CMAKE_SOURCE_DIR}/Services/wireless
     ${CMAKE_SOURCE_DIR}/Services/wireless/massges
     ${CMAKE_SOURCE_DIR}/Services/wireless/port
+    ${CMAKE_SOURCE_DIR}/Drivers/rfm66
     ${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/include
     ${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
     ${CMAKE_SOURCE_DIR}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/${FREERTOS_PORT_DIR}
@@ -122,6 +123,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/Services/wireless/rp_hw_if.c
     ${CMAKE_SOURCE_DIR}/Services/wireless/backends/rp_hw_uart.c
     ${CMAKE_SOURCE_DIR}/Services/wireless/backends/rp_hw_radio.c
+    ${CMAKE_SOURCE_DIR}/Drivers/rfm66/rfm66.c
 )
 
 # rp_* wireless network model (RP_NETWORK_MODEL/RP_IOT_ROLE), see

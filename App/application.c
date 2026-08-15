@@ -59,7 +59,7 @@ void application_init(void)
   cfg.hw_ver = APP_DEV_HW_VER;
   cfg.fw_ver = APP_DEV_FW_VER;
   cfg.caps   = APP_DEV_CAPS;
-  cfg.hw_if  = RP_HW_IF_UART;
+  cfg.hw_if  = RP_HW_IF_RADIO;
 
   rp_network_init(&cfg);
 

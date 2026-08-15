@@ -11,17 +11,6 @@ static const rp_hw_if_t *interfaces[RP_HW_IF_COUNT] =
 
 static rp_hw_if_id_t active_if = RP_HW_IF_UART;
 
-void rp_hw_if_init_all(void)
-{
-    for (size_t i = 0; i < RP_HW_IF_COUNT; i++)
-    {
-        if (interfaces[i]->init)
-        {
-            interfaces[i]->init();
-        }
-    }
-}
-
 int rp_hw_if_select(rp_hw_if_id_t id)
 {
     if (id >= RP_HW_IF_COUNT)
@@ -30,6 +19,11 @@ int rp_hw_if_select(rp_hw_if_id_t id)
     }
 
     active_if = id;
+
+    if (interfaces[id]->init)
+    {
+        return interfaces[id]->init();
+    }
 
     return 0;
 }

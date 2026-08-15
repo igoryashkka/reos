@@ -493,6 +493,21 @@ static void MX_GPIO_Init(void)
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
+  HAL_GPIO_WritePin(BSP_RFM66_CS_PORT, BSP_RFM66_CS_PIN, GPIO_PIN_SET);       /* CS idle = high */
+  HAL_GPIO_WritePin(BSP_RFM66_RESET_PORT, BSP_RFM66_RESET_PIN, GPIO_PIN_RESET); /* RESET idle = low, active-high pulse */
+
+  GPIO_InitStruct.Pin = BSP_RFM66_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(BSP_RFM66_CS_PORT, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = BSP_RFM66_RESET_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BSP_RFM66_RESET_PORT, &GPIO_InitStruct);
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 

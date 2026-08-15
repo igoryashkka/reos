@@ -13,7 +13,7 @@ static void ethernet_task(void *arg)
 
     for (;;)
     {
-        HAL_GPIO_TogglePin(BSP_LED1_PORT, BSP_LED1_PIN);
+        HAL_GPIO_TogglePin(BSP_OUT1_PORT, BSP_OUT1_PIN);
         blink_count++;
 
         if ((blink_count % 10U) == 0U)

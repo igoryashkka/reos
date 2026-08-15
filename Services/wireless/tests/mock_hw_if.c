@@ -9,8 +9,6 @@ uint8_t g_mock_last_buf[512]; /* > RP_FRAME_MAX (rp_proto.h), avoids pulling tha
 size_t  g_mock_last_len;
 int     g_mock_send_count;
 
-void rp_hw_if_init_all(void) {}
-
 int rp_hw_if_select(rp_hw_if_id_t id)
 {
     (void)id;

@@ -25,8 +25,6 @@ typedef enum
     RP_HW_IF_COUNT
 } rp_hw_if_id_t;
 
-void rp_hw_if_init_all(void);
-
 int rp_hw_if_select(rp_hw_if_id_t id);
 
 int rp_hw_if_send(const uint8_t *data, size_t length);

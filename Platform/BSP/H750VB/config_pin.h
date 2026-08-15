@@ -12,9 +12,11 @@
  * посилається на символи звідси, а не на власні літерали.
  * ================================================================== */
 
-/* User LED — PA1, push-pull output (Services/network/ethernet.c) */
+
 #define BSP_LED1_PORT   GPIOA
 #define BSP_LED1_PIN    GPIO_PIN_1
+#define BSP_OUT1_PORT   BSP_LED1_PORT
+#define BSP_OUT1_PIN    BSP_LED1_PIN
 
 /* User button — PE3, EXTI rising edge (наразі лише сконфігурований,
  * обробник ще не підключено) */

@@ -31,6 +31,7 @@ set(MX_Include_Dirs
 set(BOARD_Core_Src
     ${BOARD_DIR}/Core/Src/main.c
     ${BOARD_DIR}/Core/Src/uart_stm32f413.c
+    ${BOARD_DIR}/Core/Src/spi_stm32f413.c
     ${BOARD_DIR}/Core/Src/stm32f4xx_it.c
     ${BOARD_DIR}/Core/Src/stm32f4xx_hal_msp.c
     ${BOARD_DIR}/Core/Src/sysmem.c
